@@ -1,4 +1,4 @@
-
+# -*- coding: utf-8 -*-
 import streamlit as st
 import pandas as pd
 import plotly.express as px
@@ -10,20 +10,21 @@ st.set_page_config(page_title="BrightSpace Instructores", layout="wide")
 st.title("📊 Análisis de Actividades en BrightSpace")
 st.write("Esta aplicación permite analizar las actividades de los instructores en la plataforma BrightSpace.")
 
-# Autenticación con Google
-# Cargar hoja pública de Google Sheets como CSV
-SHEET_ID = "1Eh3X8Bwd-0GoF3pyl0Xz6-oCOJm-SW9l5fItahcn99g"
-SHEET_NAME = "Hoja 1"  # Asegúrate que coincide con el nombre de la hoja
-csv_url = f"https://docs.google.com/spreadsheets/d/{SHEET_ID}/gviz/tq?tqx=out:csv&sheet={SHEET_NAME}"
-df = pd.read_csv(csv_url).dropna(how="all")
+# Enlace de descarga directa desde Google Drive
+csv_url = "https://drive.google.com/uc?export=download&id=1QGs-0UrDWK7AX3u15CqJja-J6V_6G0Fs"
 
-# Limpieza y conversión
+# Cargar los datos
+df = pd.read_csv(csv_url)
+
+# Columnas esperadas en el archivo
 cols_metrica = [
     "Cantidad de elementos de calificación",
     "Cantidad de publicaciones de debate",
     "Cantidad de publicaciones de debate iniciado",
     "Cantidad de inicios de sesión en el sistema"
 ]
+
+# Conversión de columnas a valores numéricos (en caso de errores o valores vacíos)
 df[cols_metrica] = df[cols_metrica].apply(pd.to_numeric, errors='coerce').fillna(0)
 
 # Tabla resumen
@@ -58,30 +59,3 @@ st.plotly_chart(fig3, use_container_width=True)
 fig4 = px.bar(df, x="Nombre de Profesor", y="Cantidad de inicios de sesión en el sistema",
               title="🔐 Inicios de sesión por profesor", color="Nombre de Profesor", text_auto=True)
 st.plotly_chart(fig4, use_container_width=True)
-
-
-# Gráfica combinada: Asignaciones vs Inicios de sesión por profesor
-st.header("📈 Comparación: Asignaciones vs Inicios de Sesión por Profesor")
-fig_comparativa = go.Figure()
-
-fig_comparativa.add_trace(go.Bar(
-    x=df["Nombre de Profesor"],
-    y=df["Cantidad de asignaciones"],
-    name="📂 Asignaciones"
-))
-
-fig_comparativa.add_trace(go.Bar(
-    x=df["Nombre de Profesor"],
-    y=df["Cantidad de inicios de sesión en el sistema"],
-    name="🔐 Inicios de Sesión"
-))
-
-fig_comparativa.update_layout(
-    barmode='group',
-    xaxis_title="Profesor",
-    yaxis_title="Cantidad",
-    title="📊 Asignaciones vs Inicios de Sesión por Profesor",
-    legend_title="Métrica"
-)
-
-st.plotly_chart(fig_comparativa, use_container_width=True)
