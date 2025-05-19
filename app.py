@@ -4,10 +4,10 @@ import pandas as pd
 import plotly.express as px
 
 # Configuración de la página
-st.set_page_config(page_title="BrightSpace Profesores", layout="wide")
+st.set_page_config(page_title="BrightSpace Instructores", layout="wide")
 
 st.title("📊 Análisis de Actividades en BrightSpace")
-st.write("En este DashBoard  permite analizar las actividades de los Profesores de la Fundación Universitaria Salesiana en el uso del LMS BrightSpace.")
+st.write("Esta aplicación permite analizar las actividades de los instructores en la plataforma BrightSpace.")
 
 # Enlace público al archivo CSV desde Google Drive
 csv_url = "https://drive.google.com/uc?export=download&id=1QGs-0UrDWK7AX3u15CqJja-J6V_6G0Fs"
@@ -55,27 +55,37 @@ with col5:
 # Gráficos por profesor
 st.header("📊 Análisis por Profesor")
 
-# Elementos de calificación
 fig1 = px.bar(df, x="Nombre de Profesor", y="Cantidad de elementos de calificación",
               title="📝 Elementos de calificación por profesor", color="Nombre de Profesor", text_auto=True)
 st.plotly_chart(fig1, use_container_width=True)
 
-# Publicaciones de debate
 fig2 = px.bar(df, x="Nombre de Profesor", y="Cantidad de publicaciones de debate",
               title="💬 Publicaciones de debate por profesor", color="Nombre de Profesor", text_auto=True)
 st.plotly_chart(fig2, use_container_width=True)
 
-# Debates iniciados
 fig3 = px.bar(df, x="Nombre de Profesor", y="Cantidad de publicaciones de debate iniciado",
               title="📢 Debates iniciados por profesor", color="Nombre de Profesor", text_auto=True)
 st.plotly_chart(fig3, use_container_width=True)
 
-# Inicios de sesión
 fig4 = px.bar(df, x="Nombre de Profesor", y="Cantidad de inicios de sesión en el sistema",
               title="🔐 Inicios de sesión por profesor", color="Nombre de Profesor", text_auto=True)
 st.plotly_chart(fig4, use_container_width=True)
 
-# Asignaciones
 fig5 = px.bar(df, x="Nombre de Profesor", y="Cantidad de asignaciones",
               title="📂 Asignaciones por profesor", color="Nombre de Profesor", text_auto=True)
 st.plotly_chart(fig5, use_container_width=True)
+
+# 🔍 Análisis de uso total de la plataforma
+st.header("🏆 Ranking de uso total de la plataforma")
+
+# Crear columna "Uso Total"
+df["Uso Total"] = df[cols_metrica].sum(axis=1)
+
+# Ordenar de mayor a menor
+df_uso = df.sort_values("Uso Total", ascending=False)
+
+# Gráfico de uso total
+fig_uso = px.bar(df_uso, x="Nombre de Profesor", y="Uso Total",
+                 title="🏆 Uso total de la plataforma por profesor",
+                 color="Nombre de Profesor", text_auto=True)
+st.plotly_chart(fig_uso, use_container_width=True)
