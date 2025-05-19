@@ -4,10 +4,10 @@ import pandas as pd
 import plotly.express as px
 
 # Configuración de la página
-st.set_page_config(page_title="BrightSpace Instructores", layout="wide")
+st.set_page_config(page_title="BrightSpace Profesores", layout="wide")
 
 st.title("📊 Análisis de Actividades en BrightSpace")
-st.write("Esta aplicación permite analizar las actividades de los instructores en la plataforma BrightSpace.")
+st.write("En este DashBoard  permite analizar las actividades de los Profesores de la Fundación Universitaria Salesiana en el uso del LMS BrightSpace.")
 
 # Enlace público al archivo CSV desde Google Drive
 csv_url = "https://drive.google.com/uc?export=download&id=1QGs-0UrDWK7AX3u15CqJja-J6V_6G0Fs"
