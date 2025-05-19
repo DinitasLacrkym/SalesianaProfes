@@ -7,7 +7,7 @@ import plotly.express as px
 st.set_page_config(page_title="BrightSpace Instructores", layout="wide")
 
 st.title("📊 Análisis de Actividades en BrightSpace")
-st.write("Esta aplicación permite analizar las actividades de los instructores en la plataforma BrightSpace.")
+st.write("Este dashboar nos  permite analizar las actividades de los profesores de la Fundación Universitaria Salesiana en el uso del LMS  BrightSpace.")
 
 # Enlace público al archivo CSV desde Google Drive
 csv_url = "https://drive.google.com/uc?export=download&id=1QGs-0UrDWK7AX3u15CqJja-J6V_6G0Fs"
