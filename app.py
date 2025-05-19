@@ -33,17 +33,25 @@ resumen_total = df[cols_metrica].sum().reset_index()
 resumen_total.columns = ["Métrica", "Total"]
 st.table(resumen_total)
 
-# Indicadores KPI
+# Indicadores KPI en columnas
 st.header("📌 Indicadores Clave")
-fig_kpi = go.Figure()
-fig_kpi.add_trace(go.Indicator(mode="number", value=resumen_total.loc[0, "Total"], title="📝 Calificaciones"))
-fig_kpi.add_trace(go.Indicator(mode="number", value=resumen_total.loc[1, "Total"], title="💬 Publicaciones de debate"))
-fig_kpi.add_trace(go.Indicator(mode="number", value=resumen_total.loc[2, "Total"], title="📢 Debates iniciados"))
-fig_kpi.add_trace(go.Indicator(mode="number", value=resumen_total.loc[3, "Total"], title="🔐 Inicios de sesión"))
-st.plotly_chart(fig_kpi, use_container_width=True)
+col1, col2, col3, col4 = st.columns(4)
+
+with col1:
+    st.metric(label="📝 Calificaciones", value=int(resumen_total.loc[0, "Total"]))
+
+with col2:
+    st.metric(label="💬 Publicaciones de debate", value=int(resumen_total.loc[1, "Total"]))
+
+with col3:
+    st.metric(label="📢 Debates iniciados", value=int(resumen_total.loc[2, "Total"]))
+
+with col4:
+    st.metric(label="🔐 Inicios de sesión", value=int(resumen_total.loc[3, "Total"]))
 
 # Gráficos por profesor
 st.header("📊 Análisis por Profesor")
+
 fig1 = px.bar(df, x="Nombre de Profesor", y="Cantidad de elementos de calificación",
               title="📝 Elementos de calificación por profesor", color="Nombre de Profesor", text_auto=True)
 st.plotly_chart(fig1, use_container_width=True)
