@@ -2,7 +2,6 @@
 import streamlit as st
 import pandas as pd
 import plotly.express as px
-import plotly.graph_objects as go
 
 # Configuración de la página
 st.set_page_config(page_title="BrightSpace Instructores", layout="wide")
@@ -10,21 +9,22 @@ st.set_page_config(page_title="BrightSpace Instructores", layout="wide")
 st.title("📊 Análisis de Actividades en BrightSpace")
 st.write("Esta aplicación permite analizar las actividades de los instructores en la plataforma BrightSpace.")
 
-# Enlace de descarga directa desde Google Drive
+# Enlace público al archivo CSV desde Google Drive
 csv_url = "https://drive.google.com/uc?export=download&id=1QGs-0UrDWK7AX3u15CqJja-J6V_6G0Fs"
 
 # Cargar los datos
 df = pd.read_csv(csv_url)
 
-# Columnas esperadas en el archivo
+# Columnas esperadas (incluyendo asignaciones)
 cols_metrica = [
     "Cantidad de elementos de calificación",
     "Cantidad de publicaciones de debate",
     "Cantidad de publicaciones de debate iniciado",
-    "Cantidad de inicios de sesión en el sistema"
+    "Cantidad de inicios de sesión en el sistema",
+    "Cantidad de asignaciones"
 ]
 
-# Conversión de columnas a valores numéricos (en caso de errores o valores vacíos)
+# Convertir columnas a numérico
 df[cols_metrica] = df[cols_metrica].apply(pd.to_numeric, errors='coerce').fillna(0)
 
 # Tabla resumen
@@ -33,9 +33,9 @@ resumen_total = df[cols_metrica].sum().reset_index()
 resumen_total.columns = ["Métrica", "Total"]
 st.table(resumen_total)
 
-# Indicadores KPI en columnas
+# Indicadores Clave en columnas
 st.header("📌 Indicadores Clave")
-col1, col2, col3, col4 = st.columns(4)
+col1, col2, col3, col4, col5 = st.columns(5)
 
 with col1:
     st.metric(label="📝 Calificaciones", value=int(resumen_total.loc[0, "Total"]))
@@ -49,21 +49,33 @@ with col3:
 with col4:
     st.metric(label="🔐 Inicios de sesión", value=int(resumen_total.loc[3, "Total"]))
 
+with col5:
+    st.metric(label="📂 Asignaciones", value=int(resumen_total.loc[4, "Total"]))
+
 # Gráficos por profesor
 st.header("📊 Análisis por Profesor")
 
+# Elementos de calificación
 fig1 = px.bar(df, x="Nombre de Profesor", y="Cantidad de elementos de calificación",
               title="📝 Elementos de calificación por profesor", color="Nombre de Profesor", text_auto=True)
 st.plotly_chart(fig1, use_container_width=True)
 
+# Publicaciones de debate
 fig2 = px.bar(df, x="Nombre de Profesor", y="Cantidad de publicaciones de debate",
               title="💬 Publicaciones de debate por profesor", color="Nombre de Profesor", text_auto=True)
 st.plotly_chart(fig2, use_container_width=True)
 
+# Debates iniciados
 fig3 = px.bar(df, x="Nombre de Profesor", y="Cantidad de publicaciones de debate iniciado",
               title="📢 Debates iniciados por profesor", color="Nombre de Profesor", text_auto=True)
 st.plotly_chart(fig3, use_container_width=True)
 
+# Inicios de sesión
 fig4 = px.bar(df, x="Nombre de Profesor", y="Cantidad de inicios de sesión en el sistema",
               title="🔐 Inicios de sesión por profesor", color="Nombre de Profesor", text_auto=True)
 st.plotly_chart(fig4, use_container_width=True)
+
+# Asignaciones
+fig5 = px.bar(df, x="Nombre de Profesor", y="Cantidad de asignaciones",
+              title="📂 Asignaciones por profesor", color="Nombre de Profesor", text_auto=True)
+st.plotly_chart(fig5, use_container_width=True)
