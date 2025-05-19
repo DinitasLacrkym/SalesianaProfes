@@ -76,7 +76,7 @@ fig5 = px.bar(df, x="Nombre de Profesor", y="Cantidad de asignaciones",
 st.plotly_chart(fig5, use_container_width=True)
 
 # 🔍 Análisis de uso total de la plataforma
-st.header("🏆 Ranking de uso total de la plataforma")
+st.header("🏆 Uso total de la plataforma por profesor")
 
 # Crear columna "Uso Total"
 df["Uso Total"] = df[cols_metrica].sum(axis=1)
